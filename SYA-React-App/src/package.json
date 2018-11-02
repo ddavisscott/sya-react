@@ -1,0 +1,11 @@
+{
+    "title": "Material demo",
+    "description": "https://github.com/mui-org/material-ui/blob/master/docs/src/pages/demos/paper/PaperSheet.js",
+    "dependencies": {
+      "@material-ui/core": "latest",
+      "@material-ui/icons": "3.0.1",
+      "prop-types": "latest",
+      "react": "latest",
+      "react-dom": "latest"
+    }
+  }
