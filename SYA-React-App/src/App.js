@@ -1,48 +1,79 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from './AppBar.js';
-import Demo from './demo.js';
-
-import {Provider } from 'react-redux';
-
-import Posts from './components/Posts'; 
-import PostForm from './components/PostForm';
-
-import store from './store';
-import SignIn from './components/SignIn';
-import AristSignUp from './components/ArtistSignUp';
-
+import Title from './title'
+import { FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap'
+import { Auth } from 'aws-amplify'
+import { withAuthenticator } from 'aws-amplify-react'
+import { Analytics } from 'aws-amplify'
+Auth.currentAuthenticatedUser()
+    .then(user => console.log(user))
+    .catch(err => console.log(err));
 
 
 class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-      <React.Fragment>
-      <CssBaseline />
-      <AppBar />
-      <Demo />
-      </React.Fragment>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
+  //Auth.currentAuthenticatedUser()
+  constructor(props, context) {
+    super(props, context);
 
-        </header>
-        <AristSignUp/>
-        <SignIn/>
-        <PostForm/>
-        <hr/>
-        <Posts/>
-      </div>
-      </Provider>
+    this.handleChange = this.handleChange.bind(this);
+
+    this.state = {
+      value: '',
+      inputValue:'this is input value'
+    };
+  }
+signOut = () => {
+  Auth.signOut()
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
+}
+recordEvent = () => {
+  console.log('recording...')
+  Analytics.record({
+    name: 'Test event 1',
+    attributes: {
+      username: 'dabit3'
+    }
+  })
+}
+  getValidationState() {
+    const length = this.state.value.length;
+    if (length > 10) return 'success';
+    else if (length > 5) return 'warning';
+    else if (length > 0) return 'error';
+    return null;
+  }
+
+  handleChange(e) {
+    this.setState({ value: e.target.value });
+  }
+
+  render() {
+    let typedValue = this.state.value
+    return (  
+      <div className="App">
+      <Title greeting={typedValue} />
+      <form>
+      <FormGroup
+        controlId="formBasicText"
+        validationState={this.getValidationState()}
+      >
+        <ControlLabel>Working example with validation</ControlLabel>
+        <FormControl
+          type="text"
+          value={this.state.value}
+          placeholder="Enter text"
+          onChange={this.handleChange}
+        />
+        <button onClick = {this.signOut}>Sign Out</button>
+        <FormControl.Feedback />
+        <HelpBlock>Validation is based on string length.</HelpBlock>
+      </FormGroup>
+    </form>
+    
+    </div>
     );
   }
 }
 
-export default App;
+export default withAuthenticator(App);
