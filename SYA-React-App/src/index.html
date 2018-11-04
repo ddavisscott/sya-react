@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <p>
+Hey! Lets try uploading to s3 directly :)
+</p>
+<img src="https://s3-us-west-1.amazonaws.com/sya-react-sample-image/rickye.jpg" alt="W3Schools.com" style="width:300px;height:300px;">
+<form method="post" enctype="multipart/form-data" action="/upload">
+    <p>
+        <input type="text" name="title" placeholder="optional title"/>
+    </p>
+
+    <p>
+        <input type="file" name="upl"/>
+    </p>
+
+    <p>
+        <input type="submit"/>
+    </p>
+</form>
+</body>
+</html>

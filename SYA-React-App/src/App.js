@@ -15,6 +15,12 @@ import store from './store';
 import SignIn from './components/SignIn';
 import AristSignUp from './components/ArtistSignUp';
 
+//the Amplify library needed to integrate Amazon Cognito for user 
+// signup/signin
+
+import { withAuthenticator } from 'aws-amplify-react'
+//import ArtistSignUp from './components/ArtistSignUp';
+
 
 
 class App extends Component {
@@ -45,4 +51,5 @@ class App extends Component {
   }
 }
 
-export default App;
+//withAuthenticator(App) means the application will not run until user is signed in.
+export default withAuthenticator(App);
