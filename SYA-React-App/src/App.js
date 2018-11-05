@@ -1,48 +1,41 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Title from './title'
+import { FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap'
+import { Auth } from 'aws-amplify'
+import { withAuthenticator } from 'aws-amplify-react'
+import { Analytics } from 'aws-amplify'
+import { Storage } from 'aws-amplify';
+import UploadImage from './UploadImage';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from './AppBar.js';
-import Demo from './demo.js';
-
-import {Provider } from 'react-redux';
-
-import Posts from './components/Posts'; 
-import PostForm from './components/PostForm';
-
-import store from './store';
-import SignIn from './components/SignIn';
-import AristSignUp from './components/ArtistSignUp';
-
+Auth.currentAuthenticatedUser()
+    .then(user => console.log(user))
+    .catch(err => console.log(err));
 
 
 class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-      <React.Fragment>
-      <CssBaseline />
-      <AppBar />
-      <Demo />
-      </React.Fragment>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
+      signOut = () => {
+        Auth.signOut()
+          .then(data => console.log(data))
+          .catch(err => console.log(err));
+      }
+    
+      render() {
+        Storage.list('',{
+            bucket:'myapp-20181030214040-deployment'})
+        .then(result => console.log(result))
+        .catch(err => console.log(err));
+          return (
+            <div>
+              <button onClick = {this.signOut}>Sign Out</button>
+              <UploadImage/>
+            </div>
+          )
+      }
+    }
+    
 
-        </header>
-        <AristSignUp/>
-        <SignIn/>
-        <PostForm/>
-        <hr/>
-        <Posts/>
-      </div>
-      </Provider>
-    );
-  }
-}
 
-export default App;
+
+
+export default withAuthenticator(App);
