@@ -5,6 +5,10 @@ import { FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap
 import { Auth } from 'aws-amplify'
 import { withAuthenticator } from 'aws-amplify-react'
 import { Analytics } from 'aws-amplify'
+import PersistentDrawerLeft from './PersistentDrawerLeft';
+
+
+
 Auth.currentAuthenticatedUser()
     .then(user => console.log(user))
     .catch(err => console.log(err));
@@ -22,7 +26,8 @@ class App extends Component {
       inputValue:'this is input value'
     };
   }
-signOut = () => {
+signOut = (e) => {
+  e.preventDefault();
   Auth.signOut()
     .then(data => console.log(data))
     .catch(err => console.log(err));
@@ -50,7 +55,8 @@ recordEvent = () => {
 
   render() {
     let typedValue = this.state.value
-    return (  
+    Auth.currentAuthenticatedUser().then(user => console.log(user.attributes['email']));
+    return ( 
       <div className="App">
       <Title greeting={typedValue} />
       <form>
@@ -58,6 +64,7 @@ recordEvent = () => {
         controlId="formBasicText"
         validationState={this.getValidationState()}
       >
+        <PersistentDrawerLeft /> <br/>
         <ControlLabel>Working example with validation</ControlLabel>
         <FormControl
           type="text"
@@ -70,7 +77,6 @@ recordEvent = () => {
         <HelpBlock>Validation is based on string length.</HelpBlock>
       </FormGroup>
     </form>
-    
     </div>
     );
   }
